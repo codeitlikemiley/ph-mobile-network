@@ -1,12 +1,13 @@
 use std::error::Error;
 use std::fmt;
 
-#[derive(Debug)]
+#[derive(Debug,Clone)]
 pub enum MobileNetworkError {
     InvalidLength,
     NonNumeric,
     UnrecognizedPrefix,
     RegexError(String), // To handle regex compilation errors
+    LockError(String), // To handle mutex lock errors
 }
 
 impl fmt::Display for MobileNetworkError {
@@ -23,6 +24,7 @@ impl fmt::Display for MobileNetworkError {
                 write!(f, "Mobile number prefix is not recognized.")
             }
             MobileNetworkError::RegexError(text) => write!(f, "Invalid Regex error {}", text),
+            MobileNetworkError::LockError(text) => write!(f, "Mutex lock error {}", text),
         }
     }
 }

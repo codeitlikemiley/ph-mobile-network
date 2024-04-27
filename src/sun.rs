@@ -1,20 +1,16 @@
 use regex::Regex;
 
-use crate::{errors::MobileNetworkError, validate::Validate};
+use crate::{errors::MobileNetworkError, pattern::generate_pattern, validate::Validate};
 
-pub(crate) const SUN_PREFIXES: &[&str] = &[
-    "0922", "0923", "0924", "0925", "0931", "0932", "0933", "0934", "0940", "0941", "0942", "0943",
-    "0944", "0973", "0974",
-];
-
+#[derive(Debug, Clone)]
 pub struct Sun(regex::Regex);
 
 impl Sun {
-    pub(crate) fn new() -> Result<Self, MobileNetworkError> {
-        let pattern = format!("^({})\\d{{7}}$", SUN_PREFIXES.join("|"));
-        Regex::new(&pattern)
-            .map(Self)
-            .map_err(|e| MobileNetworkError::RegexError(e.to_string()))
+    pub(crate) fn new(prefixes: &[&str]) -> Result<Self, MobileNetworkError> {
+        let pattern = generate_pattern(prefixes)?;
+        let regex =
+            Regex::new(&pattern).map_err(|e| MobileNetworkError::RegexError(e.to_string()))?;
+        Ok(Self(regex))
     }
 }
 

@@ -1,20 +1,16 @@
 use regex::Regex;
 
-use crate::{errors::MobileNetworkError, validate::Validate};
+use crate::{errors::MobileNetworkError, pattern::generate_pattern, validate::Validate};
 
-pub(crate) const TALK_N_TEXT_PREFIXES: &[&str] = &[
-    "0907", "0909", "0910", "0912", "0918", "0930", "0938", "0946", "0948", "0950", "0963", "0989",
-    "0998",
-];
-
+#[derive(Debug, Clone)]
 pub struct TNT(regex::Regex);
 
 impl TNT {
-    pub(crate) fn new() -> Result<Self, MobileNetworkError> {
-        let pattern = format!("^({})\\d{{7}}$", TALK_N_TEXT_PREFIXES.join("|"));
-        Regex::new(&pattern)
-            .map(Self)
-            .map_err(|e| MobileNetworkError::RegexError(e.to_string()))
+    pub(crate) fn new(prefixes: &[&str]) -> Result<Self, MobileNetworkError> {
+        let pattern = generate_pattern(prefixes)?;
+        let regex =
+            Regex::new(&pattern).map_err(|e| MobileNetworkError::RegexError(e.to_string()))?;
+        Ok(Self(regex))
     }
 }
 

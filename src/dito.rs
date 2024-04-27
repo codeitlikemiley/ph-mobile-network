@@ -1,20 +1,16 @@
 use regex::Regex;
 
-use crate::{errors::MobileNetworkError, validate::Validate};
+use crate::{errors::MobileNetworkError, pattern::generate_pattern, validate::Validate};
 
-pub(crate) const DITO_PREFIXES: &[&str] = &[
-    "0895", "0896", "0897", "0898", "0991", "0992", "0993", "0994",
-];
-
+#[derive(Debug, Clone)]
 pub struct Dito(regex::Regex);
 
 impl Dito {
-    pub(crate) fn new() -> Result<Self, MobileNetworkError> {
-        
-        let pattern = format!("^({})\\d{{7}}$", DITO_PREFIXES.join("|"));
-        Regex::new(&pattern)
-            .map(Self)
-            .map_err(|e| MobileNetworkError::RegexError(e.to_string()))
+    pub(crate) fn new(prefixes: &[&str]) -> Result<Self, MobileNetworkError> {
+        let pattern = generate_pattern(prefixes)?;
+        let regex =
+            Regex::new(&pattern).map_err(|e| MobileNetworkError::RegexError(e.to_string()))?;
+        Ok(Self(regex))
     }
 }
 
@@ -29,4 +25,3 @@ impl Validate for Dito {
         Ok(self.0.is_match(number))
     }
 }
-

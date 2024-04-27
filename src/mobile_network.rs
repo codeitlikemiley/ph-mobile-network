@@ -1,8 +1,10 @@
 use crate::{
-    dito::{Dito, DITO_PREFIXES}, errors::MobileNetworkError, globe::{Globe, GLOBE_PREFIXES}, smart::{Smart, SMART_PREFIXES}, sun::{Sun, SUN_PREFIXES}, talk_n_text::{TALK_N_TEXT_PREFIXES, TNT}, validate::Validate
+    dito::Dito, errors::MobileNetworkError, globe::Globe, smart::Smart, sun::Sun, talk_n_text::TNT,
+    validate::Validate, DITO_PREFIXES, GLOBE_PREFIXES, SMART_PREFIXES, SUN_PREFIXES, TNT_PREFIXES,
 };
 
-pub  enum MobileNetwork {
+#[derive(Debug, Clone)]
+pub enum MobileNetwork {
     Globe(Globe),
     Smart(Smart),
     Sun(Sun),
@@ -14,13 +16,39 @@ pub  enum MobileNetwork {
 impl MobileNetwork {
     pub fn get(number: &str) -> Result<Self, MobileNetworkError> {
         let prefix = &number[..number.len().min(4)];
-        match prefix {
-            p if GLOBE_PREFIXES.contains(&p) => Globe::new().map(MobileNetwork::Globe),
-            p if SMART_PREFIXES.contains(&p) => Smart::new().map(MobileNetwork::Smart),
-            p if SUN_PREFIXES.contains(&p) => Sun::new().map(MobileNetwork::Sun),
-            p if TALK_N_TEXT_PREFIXES.contains(&p) => TNT::new().map(MobileNetwork::TNT),
-            p if DITO_PREFIXES.contains(&p) => Dito::new().map(MobileNetwork::Dito),
-            _ => Err(MobileNetworkError::UnrecognizedPrefix),
+
+        let globe_prefixes = GLOBE_PREFIXES.try_lock().map_err(|_| {
+            MobileNetworkError::LockError("Failed to lock GLOBE_PREFIXES".to_string())
+        })?;
+
+        let smart_prefixes = SMART_PREFIXES.try_lock().map_err(|_| {
+            MobileNetworkError::LockError("Failed to lock SMART_PREFIXES".to_string())
+        })?;
+
+        let sun_prefixes = SUN_PREFIXES.try_lock().map_err(|_| {
+            MobileNetworkError::LockError("Failed to lock SUN_PREFIXES".to_string())
+        })?;
+
+        let talk_n_text_prefixes = TNT_PREFIXES.try_lock().map_err(|_| {
+            MobileNetworkError::LockError("Failed to lock TALK_N_TEXT_PREFIXES".to_string())
+        })?;
+
+        let dito_prefixes = DITO_PREFIXES.try_lock().map_err(|_| {
+            MobileNetworkError::LockError("Failed to lock DITO_PREFIXES".to_string())
+        })?;
+
+        if globe_prefixes.contains(&prefix) {
+            Globe::new(&globe_prefixes).map(MobileNetwork::Globe)
+        } else if smart_prefixes.contains(&prefix) {
+            Smart::new(&smart_prefixes).map(MobileNetwork::Smart)
+        } else if sun_prefixes.contains(&prefix) {
+            Sun::new(&sun_prefixes).map(MobileNetwork::Sun)
+        } else if talk_n_text_prefixes.contains(&prefix) {
+            TNT::new(&talk_n_text_prefixes).map(MobileNetwork::TNT)
+        } else if dito_prefixes.contains(&prefix) {
+            Dito::new(&dito_prefixes).map(MobileNetwork::Dito)
+        } else {
+            Err(MobileNetworkError::UnrecognizedPrefix)
         }
     }
 }
