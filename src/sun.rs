@@ -2,7 +2,6 @@ use regex::Regex;
 
 use crate::{errors::MobileNetworkError, pattern::generate_pattern, validate::Validate};
 
-#[derive(Debug, Clone)]
 pub struct Sun(regex::Regex);
 
 impl Sun {

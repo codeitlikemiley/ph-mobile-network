@@ -3,7 +3,6 @@ use crate::{
     validate::Validate, DITO_PREFIXES, GLOBE_PREFIXES, SMART_PREFIXES, SUN_PREFIXES, TNT_PREFIXES,
 };
 
-#[derive(Debug, Clone)]
 pub enum MobileNetwork {
     Globe(Globe),
     Smart(Smart),
