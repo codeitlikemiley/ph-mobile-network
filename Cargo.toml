@@ -1,0 +1,15 @@
+[package]
+name = "ph-mobile-network"
+version = "0.1.0"
+edition = "2021"
+authors = ["Uriah Galang <codeitlikemiley@gmail.com>"]
+description = "A library for identifying mobile network operators in the Philippines based on phone number prefixes."
+license = "MIT"
+repository = "https://github.com/codeitlikemiley/ph-mobile-network"
+documentation = "https://github.com/codeitlikemiley/ph-mobile-network/Readme.md"
+homepage = "https://github.com/codeitlikemiley/ph-mobile-network"
+keywords = ["mobile", "network", "philippines", "prefix"]
+categories = ["api-bindings", "development-tools::debugging"]
+
+[dependencies]
+regex = "1.10.4"
