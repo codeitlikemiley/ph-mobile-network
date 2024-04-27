@@ -4,9 +4,10 @@ use lazy_static::lazy_static;
 
 pub(crate) mod dito;
 pub mod errors;
-pub(crate) mod pattern;
 pub(crate) mod globe;
 pub mod mobile_network;
+pub mod mutate;
+pub(crate) mod pattern;
 pub(crate) mod smart;
 pub(crate) mod sun;
 pub(crate) mod talk_n_text;
@@ -22,21 +23,11 @@ lazy_static! {
         ]));
 }
 
-pub fn append_globe_prefix(prefix: &'static str) {
-    let mut prefixes = GLOBE_PREFIXES.lock().unwrap();
-    prefixes.push(prefix);
-}
-
 lazy_static! {
     pub(crate) static ref DITO_PREFIXES: Arc<Mutex<Vec<&'static str>>> =
         Arc::new(Mutex::new(vec![
             "0895", "0896", "0897", "0898", "0991", "0992", "0993", "0994",
         ]));
-}
-
-pub fn append_dito_prefix(prefix: &'static str) {
-    let mut prefixes = DITO_PREFIXES.lock().unwrap();
-    prefixes.push(prefix);
 }
 
 lazy_static! {
@@ -48,21 +39,11 @@ lazy_static! {
         ]));
 }
 
-pub fn append_smart_prefix(prefix: &'static str) {
-    let mut prefixes = SMART_PREFIXES.lock().unwrap();
-    prefixes.push(prefix);
-}
-
 lazy_static! {
     pub(crate) static ref SUN_PREFIXES: Arc<Mutex<Vec<&'static str>>> = Arc::new(Mutex::new(vec![
         "0922", "0923", "0924", "0925", "0931", "0932", "0933", "0934", "0940", "0941", "0942",
         "0943", "0944", "0973", "0974",
     ]));
-}
-
-pub fn append_sun_prefix(prefix: &'static str) {
-    let mut prefixes = SUN_PREFIXES.lock().unwrap();
-    prefixes.push(prefix);
 }
 
 lazy_static! {
@@ -72,13 +53,13 @@ lazy_static! {
     ]));
 }
 
-pub fn append_tnt_prefix(prefix: &'static str) {
-    let mut prefixes = TNT_PREFIXES.lock().unwrap();
-    prefixes.push(prefix);
-}
-
 #[cfg(test)]
 mod tests {
+    use crate::mutate::{
+        append_dito_prefix, append_globe_prefix, append_smart_prefix, append_sun_prefix,
+        append_tnt_prefix,
+    };
+
     use super::*;
     use std::thread;
 
