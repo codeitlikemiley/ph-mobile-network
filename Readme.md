@@ -1,6 +1,6 @@
 # PH Mobile Network Library
 
-[![Rust](https://github.com/codeitlikemiley/ph_mobile_network/actions/workflows/rust.yml/badge.svg)](https://github.com/codeitlikemiley/ph_mobile_network/actions/workflows/rust.yml)
+[![Rust](https://github.com/codeitlikemiley/ph-mobile-network/actions/workflows/rust.yml/badge.svg)](https://github.com/codeitlikemiley/ph-mobile-network/actions/workflows/rust.yml)
 
 The PH Mobile Network Library provides a robust solution for identifying and validating mobile network operators based on phone number prefixes in the Philippines. It supports networks such as Globe, Smart, Sun, TNT, and Dito, and ensures comprehensive validation against common input errors.
 
@@ -19,7 +19,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ph_mobile_network = "0.1.2"
+ph-mobile-network = "0.1.3"
 ```
 
 
@@ -100,7 +100,7 @@ Note: there might be missing , prefix or invalid prefix on the library ,if there
 
 Contributions are welcome! If you would like to contribute, please fork the repository and submit a pull request.
 
-1. Fork it (https://github.com/codeitlikemiley/ph_mobile_network/fork)
+1. Fork it (https://github.com/codeitlikemiley/ph-mobile-network/fork)
 2. Create your feature branch (`git checkout -b missing-prefix/xxxx`)
 3. Commit your changes (`git commit -am 'Add xxxx prefix on MobileNetwork::{Variants}'`)
 4. Push to the branch (`git push origin missing-prefix/xxxx`)
