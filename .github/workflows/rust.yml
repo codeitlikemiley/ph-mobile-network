@@ -21,9 +21,9 @@ jobs:
         override: true
 
     - name: Install cargo-nextest via cargo-binstall
-      uses: cargo-bins/cargo-binstall@main
+      uses: taiki-e/install-action@v2
       with:
-        crate: cargo-nextest
+        tool: cargo-nextest
 
     - name: Check
       uses: actions-rs/cargo@v1
