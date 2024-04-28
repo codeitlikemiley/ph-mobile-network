@@ -1,0 +1,30 @@
+name: Rust
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Rust
+      uses: actions-rs/toolchain@v1
+      with:
+        toolchain: stable
+        profile: minimal
+        override: true
+
+    - name: Check
+      uses: actions-rs/cargo@v1
+      with:
+        command: check
+
+    - name: Run tests
+      uses: actions-rs/cargo@v1
+      with:
+        command: test
