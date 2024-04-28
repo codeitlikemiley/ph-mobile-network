@@ -12,6 +12,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Install Rust
       uses: actions-rs/toolchain@v1
       with:
@@ -19,12 +20,14 @@ jobs:
         profile: minimal
         override: true
 
+    - name: Install cargo-nextest
+      run: cargo install cargo-nextest
+
     - name: Check
       uses: actions-rs/cargo@v1
       with:
         command: check
 
-    - name: Run tests
-      uses: actions-rs/cargo@v1
-      with:
-        command: test -- --test-threads=1
+    - name: Run tests with cargo nextest
+      run: cargo nextest run
+
