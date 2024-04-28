@@ -20,8 +20,10 @@ jobs:
         profile: minimal
         override: true
 
-    - name: Install cargo-nextest
-      run: cargo install cargo-nextest
+    - name: Install cargo-nextest via cargo-binstall
+      uses: cargo-bins/cargo-binstall@main
+      with:
+        crate: cargo-nextest
 
     - name: Check
       uses: actions-rs/cargo@v1
@@ -30,4 +32,3 @@ jobs:
 
     - name: Run tests with cargo nextest
       run: cargo nextest run
-
