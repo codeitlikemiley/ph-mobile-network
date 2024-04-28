@@ -1,6 +1,6 @@
 [package]
 name = "ph-mobile-network"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Uriah Galang <codeitlikemiley@gmail.com>"]
 description = "A library for identifying mobile network operators in the Philippines based on phone number prefixes."
