@@ -21,7 +21,7 @@ impl fmt::Display for MobileNetworkError {
                 write!(f, "Mobile number contains non-numeric characters.")
             }
             MobileNetworkError::UnrecognizedPrefix(text) => {
-                write!(f,  "Unrecognized mobile number prefix: {}", text)
+                write!(f, "Unrecognized mobile number prefix: {}", text)
             }
             MobileNetworkError::RegexError(text) => write!(f, "Regex error {}", text),
             MobileNetworkError::MutexError(text) => write!(f, "Mutex lock error {}", text),
