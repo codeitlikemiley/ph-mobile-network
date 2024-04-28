@@ -17,7 +17,7 @@ Add this to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-ph_mobile_network = "0.1.1"
+ph_mobile_network = "0.1.2"
 ```
 
 
