@@ -25,6 +25,8 @@ Usage
 
 To use the library, include it in your Rust file and utilize the MobileNetwork::get function to determine the network of a phone number and validate it:
 
+`examples/main.rs`
+
 ```rust
 use ph_mobile_network::mobile_network::MobileNetwork;
 use ph_mobile_network::mutate::{append_dito_prefixes, append_globe_prefixes, append_smart_prefixes, append_sun_prefixes, append_tnt_prefixes, reset_dito_prefixes, reset_globe_prefixes, reset_smart_prefixes, reset_sun_prefixes, reset_tnt_prefixes};
@@ -63,11 +65,15 @@ fn main() {
 }
 ```
 
-run: `cargo run -p ph-mobile-network --bin ph-mobile-network`
+run: `cargo run --example main`
 
 output:
 
 ```sh
+cargo run --example main
+   Compiling ph-mobile-network v0.1.1 (/Users/uriah/Code/ph-mobile-network)
+    Finished dev [unoptimized + debuginfo] target(s) in 0.25s
+     Running `target/debug/examples/main`
 Network identified: globe
 Validation result: true
 ```
