@@ -1,5 +1,7 @@
 # PH Mobile Network Library
 
+[![Rust](https://github.com/codeitlikemiley/ph_mobile_network/actions/workflows/rust.yml/badge.svg)](https://github.com/codeitlikemiley/ph_mobile_network/actions/workflows/rust.yml)
+
 The PH Mobile Network Library provides a robust solution for identifying and validating mobile network operators based on phone number prefixes in the Philippines. It supports networks such as Globe, Smart, Sun, TNT, and Dito, and ensures comprehensive validation against common input errors.
 
 Features
