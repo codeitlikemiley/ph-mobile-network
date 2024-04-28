@@ -1,7 +1,17 @@
 use std::fmt;
 
 use crate::{
-    dito::Dito, errors::MobileNetworkError, globals::{dito_prefixes::DITO_PREFIXES, globe_prefixes::GLOBE_PREFIXES, smart_prefixes::SMART_PREFIXES, sun_prefixes::SUN_PREFIXES, tnt_prefixes::TNT_PREFIXES}, globe::Globe, smart::Smart, sun::Sun, talk_n_text::TNT, validate::Validate
+    dito::Dito,
+    errors::MobileNetworkError,
+    globals::{
+        dito_prefixes::DITO_PREFIXES, globe_prefixes::GLOBE_PREFIXES,
+        smart_prefixes::SMART_PREFIXES, sun_prefixes::SUN_PREFIXES, tnt_prefixes::TNT_PREFIXES,
+    },
+    globe::Globe,
+    smart::Smart,
+    sun::Sun,
+    talk_n_text::TNT,
+    validate::Validate,
 };
 
 pub enum MobileNetwork {
@@ -61,7 +71,9 @@ impl Validate for MobileNetwork {
             MobileNetwork::Sun(sun) => sun.validate(number),
             MobileNetwork::TNT(tnt) => tnt.validate(number),
             MobileNetwork::Dito(dito) => dito.validate(number),
-            MobileNetwork::Invalid(text) => Err(MobileNetworkError::UnrecognizedPrefix(text.clone())),
+            MobileNetwork::Invalid(text) => {
+                Err(MobileNetworkError::UnrecognizedPrefix(text.clone()))
+            }
         }
     }
 }
@@ -76,5 +88,114 @@ impl fmt::Display for MobileNetwork {
             MobileNetwork::Dito(_) => write!(f, "dito"),
             MobileNetwork::Invalid(reason) => write!(f, "invalid ({})", reason),
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::mutate::*;
+
+    use super::*;
+
+    // Testing setup function that prepares test data and environment
+    fn setup() {
+        // Clear and set up each prefix list before each test
+        reset_dito_prefixes();
+        reset_globe_prefixes();
+        reset_smart_prefixes();
+        reset_sun_prefixes();
+        reset_tnt_prefixes();
+
+        append_dito_prefixes(&["0897", "0898"]);
+        append_globe_prefixes(&["0917", "0918"]);
+        append_smart_prefixes(&["0919", "0920"]);
+        append_sun_prefixes(&["0922", "0923"]);
+        append_tnt_prefixes(&["0930", "0938"]);
+    }
+
+    #[test]
+    fn display_formats_are_correct() {
+        setup();
+        let globe = MobileNetwork::get("09171234567").unwrap();
+        let smart = MobileNetwork::get("09191234567").unwrap();
+        let sun = MobileNetwork::get("09221234567").unwrap();
+        let tnt = MobileNetwork::get("09301234567").unwrap();
+        let dito = MobileNetwork::get("08971234567").unwrap();
+        let invalid = MobileNetwork::Invalid("test".to_string());
+
+        assert_eq!(format!("{}", globe), "globe");
+        assert_eq!(format!("{}", smart), "smart");
+        assert_eq!(format!("{}", sun), "sun");
+        assert_eq!(format!("{}", tnt), "tnt");
+        assert_eq!(format!("{}", dito), "dito");
+        assert_eq!(format!("{}", invalid), "invalid (test)");
+    }
+
+    #[test]
+    fn validate_all_network() {
+        setup();
+        let globe = MobileNetwork::get("09171234567").unwrap();
+
+        assert!(globe.validate("09171234567").is_ok());
+
+        let smart = MobileNetwork::get("09191234567").unwrap();
+        assert!(smart.validate("09191234567").is_ok());
+
+        let sun = MobileNetwork::get("09221234567").unwrap();
+        assert!(sun.validate("09221234567").is_ok());
+
+        let tnt = MobileNetwork::get("09301234567").unwrap();
+        assert!(tnt.validate("09301234567").is_ok());
+
+        let dito = MobileNetwork::get("08971234567").unwrap();
+        assert!(dito.validate("08971234567").is_ok());
+
+        let invalid = MobileNetwork::Invalid("test".to_string());
+        assert!(invalid.validate("any_number").is_err());
+    }
+
+    #[test]
+    fn test_get_globe_network() {
+        setup();
+        let result = MobileNetwork::get("09171234567");
+        assert!(matches!(result, Ok(MobileNetwork::Globe(_))));
+    }
+
+    #[test]
+    fn test_get_smart_network() {
+        setup();
+        let result = MobileNetwork::get("09191234567");
+        assert!(matches!(result, Ok(MobileNetwork::Smart(_))));
+    }
+
+    #[test]
+    fn test_get_sun_network() {
+        setup();
+        let result = MobileNetwork::get("09221234567");
+        assert!(matches!(result, Ok(MobileNetwork::Sun(_))));
+    }
+
+    #[test]
+    fn test_get_tnt_network() {
+        setup();
+        let result = MobileNetwork::get("09301234567");
+        assert!(matches!(result, Ok(MobileNetwork::TNT(_))));
+    }
+
+    #[test]
+    fn test_get_dito_network() {
+        setup();
+        let result = MobileNetwork::get("08971234567");
+        assert!(matches!(result, Ok(MobileNetwork::Dito(_))));
+    }
+
+    #[test]
+    fn test_get_invalid_network() {
+        setup();
+        let result = MobileNetwork::get("09871234567");
+        assert!(matches!(
+            result,
+            Err(MobileNetworkError::UnrecognizedPrefix(_))
+        ));
     }
 }
